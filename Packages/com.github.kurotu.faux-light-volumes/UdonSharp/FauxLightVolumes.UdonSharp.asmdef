@@ -1,0 +1,19 @@
+{
+    "name": "FauxLightVolumes.UdonSharp",
+    "rootNamespace": "FauxLightVolumes",
+    "references": [
+        "UdonSharp.Runtime",
+        "VRC.Udon"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [
+        "VRC.Udon.Common.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
