@@ -2,6 +2,10 @@ Shader "Hidden/Faux Light Volumes"
 {
     Properties
     {
+        // Stencil controls (configure per-material to avoid bit conflicts)
+        _StencilRef ("Stencil Ref", Range(0, 255)) = 1
+        _StencilReadMask ("Stencil Read Mask", Range(0, 255)) = 1
+        _StencilWriteMask ("Stencil Write Mask", Range(0, 255)) = 1
     }
     SubShader
     {
@@ -10,6 +14,18 @@ Shader "Hidden/Faux Light Volumes"
 
         Pass
         {
+            // Ensure only the first projector applies the effect per pixel.
+            // Uses the lowest stencil bit: if it's not 1 yet, draw and set it to 1; otherwise skip.
+            Stencil
+            {
+                Ref [_StencilRef]
+                ReadMask [_StencilReadMask]
+                WriteMask [_StencilWriteMask]
+                Comp NotEqual
+                Pass Replace
+                Fail Keep
+                ZFail Keep
+            }
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -57,4 +73,5 @@ Shader "Hidden/Faux Light Volumes"
         }
     }
     FallBack "Diffuse"
+    CustomEditor "FauxLightVolumes.Editor.FauxLightVolumesShaderGUI"
 }
