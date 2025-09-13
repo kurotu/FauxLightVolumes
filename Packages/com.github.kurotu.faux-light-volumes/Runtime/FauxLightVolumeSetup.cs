@@ -24,7 +24,7 @@ namespace FauxLightVolumes
             TryUpdateManagerArray();
         }
 
-        private void TryUpdateManagerArray()
+        public void TryUpdateManagerArray()
         {
             // Find the manager component on the same GameObject by type name to avoid assembly coupling
             var manager = FindComponentByTypeName(gameObject, "FauxLightVolumeManager");

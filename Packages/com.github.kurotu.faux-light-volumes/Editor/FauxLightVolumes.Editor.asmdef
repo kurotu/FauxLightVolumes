@@ -2,7 +2,8 @@
     "name": "FauxLightVolumes.Editor",
     "rootNamespace": "FauxLightVolumes.Editor",
     "references": [
-        "FauxLightVolumes"
+        "FauxLightVolumes",
+        "red.sim.LightVolumes"
     ],
     "includePlatforms": [
         "Editor"
@@ -13,6 +14,12 @@
     "precompiledReferences": [],
     "autoReferenced": false,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "red.sim.lightvolumes",
+            "expression": "[2.0.0,3.0.0-a)",
+            "define": "FLV_VRCLV"
+        }
+    ],
     "noEngineReferences": false
 }
