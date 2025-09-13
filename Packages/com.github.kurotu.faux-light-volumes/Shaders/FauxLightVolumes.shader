@@ -10,7 +10,8 @@ Shader "Hidden/Faux Light Volumes"
     SubShader
     {
         Blend DstColor SrcColor // 2x Multiply
-        Tags { "RenderType"="Opaque" "IgnoreProjector"="True" }
+        // Default to AlphaTest+50 (2500): render after opaque and before full transparents. Per-material override via CustomEditor.
+        Tags { "RenderType"="Opaque" "Queue"="AlphaTest+50" "IgnoreProjector"="True" }
 
         Pass
         {

@@ -10,6 +10,10 @@ namespace FauxLightVolumes.Editor
 
         public override void OnGUI(MaterialEditor materialEditor, MaterialProperty[] properties)
         {
+            // Render Queue control
+            EditorGUILayout.LabelField("Rendering", EditorStyles.boldLabel);
+            materialEditor.RenderQueueField();
+
             // Draw default shader properties except stencil trio (we'll manage them)
             MaterialProperty stencilRef = FindProperty("_StencilRef", properties, false);
             MaterialProperty stencilReadMask = FindProperty("_StencilReadMask", properties, false);
@@ -24,6 +28,7 @@ namespace FauxLightVolumes.Editor
             }
 
             EditorGUILayout.Space();
+
             EditorGUILayout.LabelField("Stencil", EditorStyles.boldLabel);
 
             // Derive current bit: prefer first set bit from read mask, else from write, else from ref.
@@ -62,8 +67,9 @@ namespace FauxLightVolumes.Editor
                 }
             }
 
-            // Advanced overrides: always visible
             EditorGUILayout.Space();
+
+            // Advanced overrides: always visible
             EditorGUILayout.LabelField(AdvancedFoldoutLabel, EditorStyles.boldLabel);
             DrawIntSlider(materialEditor, stencilRef, "Stencil Ref (override)", 0, 255);
             DrawIntSlider(materialEditor, stencilReadMask, "Stencil Read Mask (override)", 0, 255);
