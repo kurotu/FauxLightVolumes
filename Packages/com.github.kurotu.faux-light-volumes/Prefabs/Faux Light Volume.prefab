@@ -70,7 +70,6 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 1720127313194595202}
-  ProjectorObject: {fileID: 7734225845480815243}
 --- !u!114 &1720127313194595202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,12 +172,6 @@ PrefabInstance:
 --- !u!4 &4899596472617299737 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1405446945566041364, guid: 042eb69487166524abf7ad372ce0785c,
-    type: 3}
-  m_PrefabInstance: {fileID: 5800631392249530893}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &7734225845480815243 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4263368334365700230, guid: 042eb69487166524abf7ad372ce0785c,
     type: 3}
   m_PrefabInstance: {fileID: 5800631392249530893}
   m_PrefabAsset: {fileID: 0}

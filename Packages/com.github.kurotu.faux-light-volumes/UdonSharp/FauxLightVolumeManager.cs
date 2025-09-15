@@ -12,27 +12,14 @@ namespace FauxLightVolumes
         public bool UseOnAndroid = true;
         public bool UseOnIOS = true;
 
-        public bool EnforceMinBrightness = false;
-
-        [Range(0.0f, 1.0f)]
-        public float MinBrightness = 0.0f;
-
         [SerializeField]
         private FauxLightVolumeInstance[] LightVolumes;
 
-        private int MinBrightnessId = -1;
-
         void Start()
         {
-            MinBrightnessId = VRCShader.PropertyToID("_MinBrightness");
-
             if (IsAvailableOnCurrentPlatform())
             {
                 EnableAllInstances();
-                if (EnforceMinBrightness)
-                {
-                    SetMinBrightness(MinBrightness);
-                }
             }
             else
             {
@@ -40,7 +27,7 @@ namespace FauxLightVolumes
             }
         }
 
-        public void Enable()
+        void OnEnable()
         {
             if (IsAvailableOnCurrentPlatform())
             {
@@ -48,21 +35,11 @@ namespace FauxLightVolumes
             }
         }
 
-        public void Disable()
+        void OnDisable()
         {
             if (IsAvailableOnCurrentPlatform())
             {
                 DisableAllInstances();
-            }
-        }
-
-        public void SetMinBrightness(float minBrightness)
-        {
-            if (IsAvailableOnCurrentPlatform())
-            {
-                VRCShader.SetGlobalFloat(MinBrightnessId, minBrightness);
-                EnforceMinBrightness = true;
-                MinBrightness = minBrightness;
             }
         }
 
@@ -81,7 +58,10 @@ namespace FauxLightVolumes
         {
             foreach (var lightVolume in LightVolumes)
             {
-                lightVolume.Enable();
+                if (lightVolume.gameObject != null)
+                {
+                    lightVolume.gameObject.SetActive(true);
+                }
             }
         }
 
@@ -89,7 +69,10 @@ namespace FauxLightVolumes
         {
             foreach (var lightVolume in LightVolumes)
             {
-                lightVolume.Disable();
+                if (lightVolume.gameObject != null)
+                {
+                    lightVolume.gameObject.SetActive(false);
+                }
             }
         }
     }
