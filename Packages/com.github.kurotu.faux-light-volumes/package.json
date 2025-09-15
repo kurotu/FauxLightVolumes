@@ -8,6 +8,7 @@
         "name": "kurotu"
     },
     "vpmDependencies": {
-        "com.vrchat.worlds": "^3.8.2"
+        "com.vrchat.worlds": "^3.8.2",
+        "red.sim.lightvolumes": "^2.0.0"
     }
 }

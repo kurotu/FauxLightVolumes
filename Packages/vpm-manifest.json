@@ -2,6 +2,9 @@
   "dependencies": {
     "com.vrchat.worlds": {
       "version": "3.8.2"
+    },
+    "red.sim.lightvolumes": {
+      "version": "2.0.1"
     }
   },
   "locked": {
@@ -13,6 +16,10 @@
     },
     "com.vrchat.base": {
       "version": "3.8.2",
+      "dependencies": {}
+    },
+    "red.sim.lightvolumes": {
+      "version": "2.0.1",
       "dependencies": {}
     }
   }
