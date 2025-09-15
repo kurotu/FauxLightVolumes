@@ -3,20 +3,26 @@ Shader "Hidden/Faux Light Volumes"
     Properties
     {
         // Stencil controls (configure per-material to avoid bit conflicts)
-        _StencilRef ("Stencil Ref", Range(0, 255)) = 1
-        _StencilReadMask ("Stencil Read Mask", Range(0, 255)) = 1
-        _StencilWriteMask ("Stencil Write Mask", Range(0, 255)) = 1
+        _StencilRef ("Stencil Ref", Range(0, 255)) = 32
+        _StencilReadMask ("Stencil Read Mask", Range(0, 255)) = 32
+        _StencilWriteMask ("Stencil Write Mask", Range(0, 255)) = 32
+        // Curve control for Pass2 brightness mapping: near 1 -> 0.5, dark -> quickly to 1
+        _LVGamma ("LightVolume Curve Gamma", Range(0.05, 4)) = 0.6
     }
     SubShader
     {
-        Blend DstColor SrcColor // 2x Multiply
-        // Default to AlphaTest+50 (2500): render after opaque and before full transparents. Per-material override via CustomEditor.
+        // Render after opaques and before full transparents (AlphaTest+50 = 2500).
+        // You can override the queue per material via CustomEditor.
         Tags { "RenderType"="Opaque" "Queue"="AlphaTest+50" "IgnoreProjector"="True" }
 
         Pass
         {
-            // Ensure only the first projector applies the effect per pixel.
-            // Uses the lowest stencil bit: if it's not 1 yet, draw and set it to 1; otherwise skip.
+            // BLEND — 2x multiply in a single pass
+            // Formula: Cout = SrcFactor*Src + DstFactor*Dst = Dst*Src + Dst*Src = 2*Dst*Src
+            Blend DstColor SrcColor
+
+            // STENCIL — apply only for the first overlapping volume per pixel
+            // Uses the provided Ref/Mask to avoid conflicts among different materials.
             Stencil
             {
                 Ref [_StencilRef]
@@ -31,8 +37,11 @@ Shader "Hidden/Faux Light Volumes"
             #pragma vertex vert
             #pragma fragment frag
 
-            #include "LightVolumes.cginc"
             #include "UnityCG.cginc"
+            #include "LightVolumes.cginc"
+
+            // Curve control: smaller -> faster rise in darks, larger -> flatter
+            float _LVGamma;
 
             struct appdata
             {
@@ -59,16 +68,28 @@ Shader "Hidden/Faux Light Volumes"
             fixed4 frag (v2f i) : SV_Target
             {
                 if (LightVolumesEnabled() == 0) {
-                    return fixed4(0.5,0.5,0.5,1); // no light volumes, return white (no change)
+                    // NEUTRAL PATH — keep final result equal to Dst
+                    // With 2x blend, returning 0.5 guarantees Dst_new = 2*Dst*0.5 = Dst
+                    return fixed4(0.5,0.5,0.5,1);
                 }
 
                 float3 L0, L1r, L1g, L1b;
                 LightVolumeSH(i.worldPos, L0, L1r, L1g, L1b);
                 float3 lvColor = LightVolumeEvaluate(normalize(i.worldNormal), L0, L1r, L1g, L1b);
+                // PERCEPTUAL CURVE — map luminance to a scalar in [0.5, 1.0]
+                // I ≈ 1 -> S ≈ 0.5 (white stays neutral overall after the 2x blend)
+                // I small -> S quickly -> 1 (fast rise in dark regions)
+                float I = saturate(dot(lvColor, float3(0.2126, 0.7152, 0.0722))); // luminance in linear space
+                float S = 0.5 + 0.5 * pow(saturate(1.0 - I), _LVGamma);
 
-                fixed4 col = fixed4(1,1,1,1);
-                col.rgb *= lvColor; // apply light volume shading
-                return col;
+                // COLOR PRESERVATION — keep hue by normalizing with luminance
+                // H has luminance ~1; fallback to white for tiny I to avoid instability.
+                float invI = (I > 1e-4) ? rcp(I) : 0.0;
+                float3 H = (I > 1e-4) ? saturate(lvColor * invI) : float3(1,1,1);
+
+                // Final colored multiplier in [0..1]. For lvColor=(1,1,1), H=(1,1,1) -> (S,S,S) => 0.5 at white.
+                float3 col = saturate(H * S);
+                return float4(col, 1);
             }
             ENDCG
         }
