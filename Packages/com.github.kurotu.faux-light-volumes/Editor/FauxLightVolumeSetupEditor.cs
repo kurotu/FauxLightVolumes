@@ -130,7 +130,10 @@ namespace FauxLightVolumes.Editor
                 Traverse(root.transform, t =>
                 {
                     var comp = t.GetComponent<VRCLightVolumes.LightVolume>();
-                    if (comp != null) list.Add(comp);
+                    if (comp != null && comp.Dynamic == false)
+                    {
+                        list.Add(comp);
+                    }
                 });
             }
             return list;
