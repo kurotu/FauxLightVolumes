@@ -6,8 +6,6 @@ Shader "Hidden/Faux Light Volumes"
         _StencilRef ("Stencil Ref", Range(0, 255)) = 32
         _StencilReadMask ("Stencil Read Mask", Range(0, 255)) = 32
         _StencilWriteMask ("Stencil Write Mask", Range(0, 255)) = 32
-        // Curve control for Pass2 brightness mapping: near 1 -> 0.5, dark -> quickly to 1
-        _LVGamma ("LightVolume Curve Gamma", Range(0.05, 4)) = 0.6
     }
     SubShader
     {
@@ -41,7 +39,7 @@ Shader "Hidden/Faux Light Volumes"
             #include "LightVolumes.cginc"
 
             // Curve control: smaller -> faster rise in darks, larger -> flatter
-            float _LVGamma;
+            float _Udon_LVGamma;
 
             struct appdata
             {
@@ -85,12 +83,12 @@ Shader "Hidden/Faux Light Volumes"
                 if (I <= 0.5)
                 {
                     float t = I * 2.0; // map [0,0.5] -> [0,1]
-                    S = 0.5 * pow(t, _LVGamma);
+                    S = 0.5 * pow(t, _Udon_LVGamma);
                 }
                 else
                 {
                     float t = (1.0 - I) * 2.0; // map [0.5,1] -> [1,0]
-                    S = 1.0 - 0.5 * pow(t, _LVGamma);
+                    S = 1.0 - 0.5 * pow(t, _Udon_LVGamma);
                 }
 
                 // Preserve hue/chroma: replace luminance I with the tone curve S(I)

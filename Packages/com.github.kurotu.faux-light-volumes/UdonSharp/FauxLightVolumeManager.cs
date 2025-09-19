@@ -11,12 +11,17 @@ namespace FauxLightVolumes
         public bool UseOnPC = false;
         public bool UseOnAndroid = true;
         public bool UseOnIOS = true;
+        public float Gamma = 0.6f;
 
         [SerializeField]
         private FauxLightVolumeInstance[] LightVolumes;
 
+        private int _cachedGammaPropertyID = -1;
+
         void Start()
         {
+            _cachedGammaPropertyID = VRCShader.PropertyToID("_Udon_LVGamma");
+            SetGamma(Gamma);
             if (IsAvailableOnCurrentPlatform())
             {
                 EnableAllInstances();
@@ -52,6 +57,12 @@ namespace FauxLightVolumes
 #else
             return UseOnPC;
 #endif
+        }
+
+        public void SetGamma(float gamma)
+        {
+            Gamma = gamma;
+            VRCShader.SetGlobalFloat(_cachedGammaPropertyID, Gamma);
         }
 
         private void EnableAllInstances()
