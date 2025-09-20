@@ -38,8 +38,11 @@ Shader "Hidden/Faux Light Volumes"
             #include "UnityCG.cginc"
             #include "LightVolumes.cginc"
 
-            // Curve control: smaller -> faster rise in darks, larger -> flatter
-            float _Udon_LVGamma;
+            // Tone curve globals (set via Shader.SetGlobalFloat / SetGlobalInt)
+            //  _Udon_FauxLV_Gamma      : gamma exponent (>0). If <=0, defaults to 1.0
+            //  _Udon_FauxLV_CurveMode  : 0=S-curve (original), 1=standard gamma, 2=inverse gamma
+            float _Udon_FauxLV_Gamma;    // replacement for legacy _Udon_LVGamma (renamed to avoid collisions)
+            int   _Udon_FauxLV_CurveMode; // see modes above
 
             struct appdata
             {
@@ -75,20 +78,38 @@ Shader "Hidden/Faux Light Volumes"
                 LightVolumeSH(i.worldPos, L0, L1r, L1g, L1b);
                 float3 lvColor = LightVolumeEvaluate(normalize(i.worldNormal), L0, L1r, L1g, L1b);
 
-                // LUMINANCE-BASED CORRECTION — S-curve composed of two gamma curves
-                // Below 0.5:  y = 0.5 * pow(t/0.5, gamma)
-                // Above 0.5:  y = 1.0 - 0.5 * pow((1-t)/0.5, gamma)  (inverted to connect smoothly at 0.5)
+                // LUMINANCE-BASED CORRECTION — selectable tone curve
+                // Mode 0: S-curve (original) — two joined gamma curves around 0.5
+                //   Below 0.5:  y = 0.5 * pow(2*I,   gamma)
+                //   Above 0.5:  y = 1.0 - 0.5*pow(2*(1-I), gamma)
+                // Mode 1: Standard gamma      y = pow(I, gamma)
+                // Mode 2: Inverse  gamma      y = 1 - pow(1-I, gamma)
                 float I = saturate(dot(lvColor, float3(0.2126, 0.7152, 0.0722))); // luminance in linear space
+                float gamma = _Udon_FauxLV_Gamma;
                 float S;
-                if (I <= 0.5)
+                if (_Udon_FauxLV_CurveMode < 0.5)
                 {
-                    float t = I * 2.0; // map [0,0.5] -> [0,1]
-                    S = 0.5 * pow(t, _Udon_LVGamma);
+                    // S-curve
+                    if (I <= 0.5)
+                    {
+                        float t = I * 2.0; // map [0,0.5] -> [0,1]
+                        S = 0.5 * pow(t, gamma);
+                    }
+                    else
+                    {
+                        float t = (1.0 - I) * 2.0; // map [0.5,1] -> [1,0]
+                        S = 1.0 - 0.5 * pow(t, gamma);
+                    }
+                }
+                else if (_Udon_FauxLV_CurveMode < 1.5)
+                {
+                    // Standard gamma
+                    S = pow(I, gamma);
                 }
                 else
                 {
-                    float t = (1.0 - I) * 2.0; // map [0.5,1] -> [1,0]
-                    S = 1.0 - 0.5 * pow(t, _Udon_LVGamma);
+                    // Inverse gamma
+                    S = 1.0 - pow(1.0 - I, gamma);
                 }
 
                 // Preserve hue/chroma: replace luminance I with the tone curve S(I)

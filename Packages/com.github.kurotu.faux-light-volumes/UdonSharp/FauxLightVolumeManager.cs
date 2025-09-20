@@ -12,23 +12,42 @@ namespace FauxLightVolumes
         public bool UseOnAndroid = true;
         public bool UseOnIOS = true;
         public float InitialGamma = 0.6f;
+        public FauxLightVolumeCurveMode InitialCurveMode = FauxLightVolumeCurveMode.SCurve;
 
         [SerializeField]
         private FauxLightVolumeInstance[] LightVolumes;
 
         private float _gamma;
+        private FauxLightVolumeCurveMode _curveMode;
         private int _cachedGammaPropertyID = -1;
+        private int _cachedCurveModePropertyID = -1;
 
         public float Gamma
         {
             get => _gamma;
-            set {
+            set
+            {
                 _gamma = value;
                 if (_cachedGammaPropertyID == -1)
                 {
-                    _cachedGammaPropertyID = VRCShader.PropertyToID("_Udon_LVGamma");
+                    _cachedGammaPropertyID = VRCShader.PropertyToID("_Udon_FauxLV_Gamma");
                 }
                 VRCShader.SetGlobalFloat(_cachedGammaPropertyID, _gamma);
+            }
+        }
+
+        public FauxLightVolumeCurveMode CurveMode
+        {
+            get => _curveMode;
+            set
+            {
+                _curveMode = value;
+                if (_cachedCurveModePropertyID == -1)
+                {
+                    _cachedCurveModePropertyID = VRCShader.PropertyToID("_Udon_FauxLV_CurveMode");
+                }
+                var intValue = (int)_curveMode;
+                VRCShader.SetGlobalFloat(_cachedCurveModePropertyID, intValue);
             }
         }
 
@@ -49,6 +68,7 @@ namespace FauxLightVolumes
         void Start()
         {
             Gamma = InitialGamma;
+            CurveMode = InitialCurveMode;
             if (IsAvailableOnCurrentPlatform)
             {
                 SetAllLightVolumesActive(true);
@@ -85,5 +105,12 @@ namespace FauxLightVolumes
                 }
             }
         }
+    }
+
+    public enum FauxLightVolumeCurveMode
+    {
+        SCurve = 0,
+        StandardGamma = 1,
+        InverseGamma = 2
     }
 }
