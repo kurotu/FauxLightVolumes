@@ -1,0 +1,43 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: FauxLightVolumes\n"
+"Language: ja\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "FauxLightVolumeManager.UseOnPC"
+msgstr "PCで使用"
+
+msgid "FauxLightVolumeManager.UseOnPC.tooltip"
+msgstr "PCビルドでFaux Light Volumesを有効にします。"
+
+msgid "FauxLightVolumeManager.UseOnAndroid"
+msgstr "Androidで使用"
+
+msgid "FauxLightVolumeManager.UseOnAndroid.tooltip"
+msgstr "Android(Quest)ビルドでFaux Light Volumesを有効にします。"
+
+msgid "FauxLightVolumeManager.UseOnIOS"
+msgstr "iOSで使用"
+
+msgid "FauxLightVolumeManager.UseOnIOS.tooltip"
+msgstr "iOSビルドでFaux Light Volumesを有効にします。"
+
+msgid "FauxLightVolumeManager.InitialGamma"
+msgstr "初期ガンマ"
+
+msgid "FauxLightVolumeManager.InitialGamma.tooltip"
+msgstr "開始時に適用されるガンマ値。"
+
+msgid "FauxLightVolumeManager.InitialCurveMode"
+msgstr "初期カーブモード"
+
+msgid "FauxLightVolumeManager.InitialCurveMode.tooltip"
+msgstr "開始時に適用されるカーブモード。"
+
+msgid "FauxLightVolumeManager.LightVolumes"
+msgstr "ライトボリューム一覧"
+
+msgid "FauxLightVolumeManager.LightVolumes.tooltip"
+msgstr "このマネージャーが制御するFaux Light Volumeインスタンス。"

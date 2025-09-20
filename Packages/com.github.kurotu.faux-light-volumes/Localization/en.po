@@ -1,0 +1,43 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: FauxLightVolumes\n"
+"Language: en\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "FauxLightVolumeManager.UseOnPC"
+msgstr "Use on PC"
+
+msgid "FauxLightVolumeManager.UseOnPC.tooltip"
+msgstr "Enable Faux Light Volumes on PC platform builds."
+
+msgid "FauxLightVolumeManager.UseOnAndroid"
+msgstr "Use on Android"
+
+msgid "FauxLightVolumeManager.UseOnAndroid.tooltip"
+msgstr "Enable Faux Light Volumes on Android builds (Quest)."
+
+msgid "FauxLightVolumeManager.UseOnIOS"
+msgstr "Use on iOS"
+
+msgid "FauxLightVolumeManager.UseOnIOS.tooltip"
+msgstr "Enable Faux Light Volumes on iOS builds."
+
+msgid "FauxLightVolumeManager.InitialGamma"
+msgstr "Initial Gamma"
+
+msgid "FauxLightVolumeManager.InitialGamma.tooltip"
+msgstr "Gamma value applied at start."
+
+msgid "FauxLightVolumeManager.InitialCurveMode"
+msgstr "Initial Curve Mode"
+
+msgid "FauxLightVolumeManager.InitialCurveMode.tooltip"
+msgstr "Curve mode applied at start."
+
+msgid "FauxLightVolumeManager.LightVolumes"
+msgstr "Light Volumes"
+
+msgid "FauxLightVolumeManager.LightVolumes.tooltip"
+msgstr "Managed Faux Light Volume instances controlled by this manager."

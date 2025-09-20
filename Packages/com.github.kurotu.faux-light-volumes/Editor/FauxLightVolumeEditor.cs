@@ -44,5 +44,11 @@ namespace FauxLightVolumes.Editor
                 }
             }
         }
+
+        public override void OnInspectorGUI()
+        {
+            LanguageDropdownUtility.DrawCompactLanguageRow();
+            DrawDefaultInspector();
+        }
     }
 }

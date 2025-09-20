@@ -3,7 +3,8 @@
     "rootNamespace": "FauxLightVolumes",
     "references": [
         "UdonSharp.Runtime",
-        "VRC.Udon"
+        "VRC.Udon",
+        "FauxLightVolumes"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

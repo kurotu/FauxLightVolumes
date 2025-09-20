@@ -8,13 +8,35 @@ namespace FauxLightVolumes
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class FauxLightVolumeManager : UdonSharpBehaviour
     {
+#if !COMPILER_UDONSHARP
+        [LocalizedLabel]
+#endif
         public bool UseOnPC = false;
+
+#if !COMPILER_UDONSHARP
+        [LocalizedLabel]
+#endif
         public bool UseOnAndroid = true;
+
+#if !COMPILER_UDONSHARP
+        [LocalizedLabel]
+#endif
         public bool UseOnIOS = true;
+
+#if !COMPILER_UDONSHARP
+        [LocalizedLabel]
+#endif
         public float InitialGamma = 0.6f;
+
+#if !COMPILER_UDONSHARP
+        [LocalizedLabel]
+#endif
         public FauxLightVolumeCurveMode InitialCurveMode = FauxLightVolumeCurveMode.SCurve;
 
         [SerializeField]
+#if !COMPILER_UDONSHARP
+        [LocalizedLabel]
+#endif
         private FauxLightVolumeInstance[] LightVolumes;
 
         private float _gamma;

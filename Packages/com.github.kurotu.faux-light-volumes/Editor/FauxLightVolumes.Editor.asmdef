@@ -3,6 +3,7 @@
     "rootNamespace": "FauxLightVolumes.Editor",
     "references": [
         "FauxLightVolumes",
+        "FauxLightVolumes.UdonSharp",
         "red.sim.LightVolumes"
     ],
     "includePlatforms": [
