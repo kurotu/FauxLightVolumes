@@ -11,78 +11,77 @@ namespace FauxLightVolumes
         public bool UseOnPC = false;
         public bool UseOnAndroid = true;
         public bool UseOnIOS = true;
-        public float Gamma = 0.6f;
+        public float InitialGamma = 0.6f;
 
         [SerializeField]
         private FauxLightVolumeInstance[] LightVolumes;
 
+        private float _gamma;
         private int _cachedGammaPropertyID = -1;
+
+        public float Gamma
+        {
+            get => _gamma;
+            set {
+                _gamma = value;
+                if (_cachedGammaPropertyID == -1)
+                {
+                    _cachedGammaPropertyID = VRCShader.PropertyToID("_Udon_LVGamma");
+                }
+                VRCShader.SetGlobalFloat(_cachedGammaPropertyID, _gamma);
+            }
+        }
+
+        public bool IsAvailableOnCurrentPlatform
+        {
+            get
+            {
+#if UNITY_ANDROID
+                return UseOnAndroid;
+#elif UNITY_IOS
+                return UseOnIOS;
+#else
+                return UseOnPC;
+#endif
+            }
+        }
 
         void Start()
         {
-            _cachedGammaPropertyID = VRCShader.PropertyToID("_Udon_LVGamma");
-            SetGamma(Gamma);
-            if (IsAvailableOnCurrentPlatform())
+            Gamma = InitialGamma;
+            if (IsAvailableOnCurrentPlatform)
             {
-                EnableAllInstances();
+                SetAllLightVolumesActive(true);
             }
             else
             {
-                DisableAllInstances();
+                SetAllLightVolumesActive(false);
             }
         }
 
         void OnEnable()
         {
-            if (IsAvailableOnCurrentPlatform())
+            if (IsAvailableOnCurrentPlatform)
             {
-                EnableAllInstances();
+                SetAllLightVolumesActive(true);
             }
         }
 
         void OnDisable()
         {
-            if (IsAvailableOnCurrentPlatform())
+            if (IsAvailableOnCurrentPlatform)
             {
-                DisableAllInstances();
+                SetAllLightVolumesActive(false);
             }
         }
 
-        public bool IsAvailableOnCurrentPlatform()
-        {
-#if UNITY_ANDROID
-            return UseOnAndroid;
-#elif UNITY_IOS
-            return UseOnIOS;
-#else
-            return UseOnPC;
-#endif
-        }
-
-        public void SetGamma(float gamma)
-        {
-            Gamma = gamma;
-            VRCShader.SetGlobalFloat(_cachedGammaPropertyID, Gamma);
-        }
-
-        private void EnableAllInstances()
+        private void SetAllLightVolumesActive(bool value)
         {
             foreach (var lightVolume in LightVolumes)
             {
                 if (lightVolume.gameObject != null)
                 {
-                    lightVolume.gameObject.SetActive(true);
-                }
-            }
-        }
-
-        private void DisableAllInstances()
-        {
-            foreach (var lightVolume in LightVolumes)
-            {
-                if (lightVolume.gameObject != null)
-                {
-                    lightVolume.gameObject.SetActive(false);
+                    lightVolume.gameObject.SetActive(value);
                 }
             }
         }
