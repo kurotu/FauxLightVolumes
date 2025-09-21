@@ -77,23 +77,40 @@ namespace FauxLightVolumes.Editor
                 existing.RemoveAt(i);
             }
 
-            // 4) Align position, rotation and bounds to VRCLV
+            // 4) Align position, rotation and bounds to VRCLV using proximity-based matching
+            // Create a working list of available FauxLightVolumes to assign
+            var unassigned = new List<FauxLightVolume>(existing.Where(e => e != null));
             for (int i = 0; i < vrclvs.Count; i++)
             {
                 var src = vrclvs[i].transform;
-                var dst = existing[i];
-                if (dst == null) continue;
+                if (src == null) continue;
+
+                // Find nearest FauxLightVolume (by world position) among unassigned
+                FauxLightVolume dst = null;
+                float bestDist = float.MaxValue;
+                var srcPos = src.position;
+                for (int c = 0; c < unassigned.Count; c++)
+                {
+                    var candidate = unassigned[c];
+                    if (candidate == null) continue;
+                    float d = (candidate.transform.position - srcPos).sqrMagnitude;
+                    if (d < bestDist)
+                    {
+                        bestDist = d;
+                        dst = candidate;
+                    }
+                }
+                if (dst == null) continue; // Should not happen unless list is empty unexpectedly
+                unassigned.Remove(dst);
 
                 Undo.RecordObject(dst.transform, "Align Faux Light Volume Transform");
                 Undo.RecordObject(dst, "Align Faux Light Volume Bounds");
 
-                // Match world position
+                // Match world position & rotation
                 dst.transform.position = src.position;
-
-                // Match world rotation
                 dst.transform.rotation = src.rotation;
 
-                // Prevent double-scaling: keep localScale at 1 so Bounds.size defines world size (modulo parent scale)
+                // Keep local scale at 1 (bounds control size)
                 dst.transform.localScale = Vector3.one;
 
                 // Compute local bounds size considering parent scale (if any)
@@ -111,7 +128,6 @@ namespace FauxLightVolumes.Editor
                     worldSizeAbs.z / Mathf.Max(parentScaleAbs.z, eps)
                 );
                 dst.Bounds = new Bounds(Vector3.zero, localSize);
-
                 EditorUtility.SetDirty(dst);
             }
 
