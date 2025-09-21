@@ -28,7 +28,7 @@ namespace FauxLightVolumes.Editor
         }
 
 #if FLV_VRCLV
-        private void GenerateOrAlignFromVRCLV(FauxLightVolumeSetup setup)
+        public static void GenerateOrAlignFromVRCLV(FauxLightVolumeSetup setup)
         {
             if (setup == null) return;
 
@@ -57,10 +57,11 @@ namespace FauxLightVolumes.Editor
             // Create missing ones (at this scene root)
             for (int i = existing.Count; i < vrclvs.Count; i++)
             {
-                // Instantiate into the same scene (no parent)
-                var go = (GameObject)PrefabUtility.InstantiatePrefab(prefab, scene);
                 // Unique name considering current FauxLightVolumes in this scene
                 var currentNames = CollectFauxInHierarchyOrder(scene).Select(e => e.gameObject.name).ToArray();
+
+                // Instantiate into the same scene (no parent)
+                var go = (GameObject)PrefabUtility.InstantiatePrefab(prefab, scene);
                 go.name = ObjectNames.GetUniqueName(currentNames, "Faux Light Volume");
                 Undo.RegisterCreatedObjectUndo(go, "Create Faux Light Volume");
                 existing.Add(go.GetComponent<FauxLightVolume>());
