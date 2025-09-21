@@ -47,3 +47,15 @@ msgstr "Light Volumes"
 
 msgid "FauxLightVolumeManager.LightVolumes.tooltip"
 msgstr "Managed Faux Light Volume instances controlled by this manager."
+
+msgid "UI.FauxLightVolumeSetup.VRCLVIntegrationTitle"
+msgstr "VRCLV Integration"
+
+msgid "UI.FauxLightVolumeSetup.VRCLVIntegrationHelp"
+msgstr "Generate and align Faux Light Volumes to match VRC Light Volumes (VRCLV) in the scene."
+
+msgid "UI.FauxLightVolumeSetup.VRCLVIntegrationGenerateButton"
+msgstr "Generate/Align to VRCLV"
+
+msgid "UI.FauxLightVolumeSetup.VRCLVIntegrationDisabled"
+msgstr "VRCLV integration is disabled. Install 'red.sim.lightvolumes' v2.x to enable this button."

@@ -47,3 +47,15 @@ msgstr "ライトボリューム一覧"
 
 msgid "FauxLightVolumeManager.LightVolumes.tooltip"
 msgstr "このマネージャーが制御するFaux Light Volumeインスタンス。"
+
+msgid "UI.FauxLightVolumeSetup.VRCLVIntegrationTitle"
+msgstr "VRCLV連携"
+
+msgid "UI.FauxLightVolumeSetup.VRCLVIntegrationHelp"
+msgstr "シーン内のVRC Light Volumes (VRCLV) に合わせてFaux Light Volumeを生成および整列します。"
+
+msgid "UI.FauxLightVolumeSetup.VRCLVIntegrationGenerateButton"
+msgstr "VRCLVに合わせて生成/整列"
+
+msgid "UI.FauxLightVolumeSetup.VRCLVIntegrationDisabled"
+msgstr "VRCLV連携は無効です。'red.sim.lightvolumes' v2.x をインストールすると有効になります。"

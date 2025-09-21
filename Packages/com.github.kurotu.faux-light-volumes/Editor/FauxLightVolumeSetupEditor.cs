@@ -15,15 +15,15 @@ namespace FauxLightVolumes.Editor
 
 #if FLV_VRCLV
             EditorGUILayout.Space();
-            EditorGUILayout.LabelField("VRCLV Integration", EditorStyles.boldLabel);
-            EditorGUILayout.HelpBox("Generate and align Faux Light Volumes to match VRC Light Volumes (VRCLV) in the scene.", MessageType.Info);
-            if (GUILayout.Button("Generate/Align to VRCLV Bounds"))
+            EditorGUILayout.LabelField(LocalizationManager.Get("UI.FauxLightVolumeSetup.VRCLVIntegrationTitle"), EditorStyles.boldLabel);
+            EditorGUILayout.HelpBox(LocalizationManager.Get("UI.FauxLightVolumeSetup.VRCLVIntegrationHelp"), MessageType.Info);
+            if (GUILayout.Button(LocalizationManager.Get("UI.FauxLightVolumeSetup.VRCLVIntegrationGenerateButton")))
             {
                 GenerateOrAlignFromVRCLV((FauxLightVolumeSetup)target);
             }
 #else
             EditorGUILayout.Space();
-            EditorGUILayout.HelpBox("VRCLV integration is disabled. Install 'red.sim.lightvolumes' v2.x to enable this button.", MessageType.Info);
+            EditorGUILayout.HelpBox(LocalizationManager.Get("UI.FauxLightVolumeSetup.VRCLVIntegrationDisabled"), MessageType.Info);
 #endif
         }
 
