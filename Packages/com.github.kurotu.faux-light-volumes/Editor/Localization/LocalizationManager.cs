@@ -20,9 +20,10 @@ namespace FauxLightVolumes.Editor
     {
         private const string PackageLocalizationFolder = "Packages/com.github.kurotu.faux-light-volumes/Localization";
         private const string EditorPrefLangKey = "FauxLightVolumes.Localization.Language";
+        private const string LanguageDisplayNameKey = "LanguageDisplayName"; // Each locale .po should provide msgid "LanguageDisplayName" for its self-name.
 
-    // languageCode -> LocalizationAsset
-    private static readonly Dictionary<string, LocalizationAsset> _languageAssets = new Dictionary<string, LocalizationAsset>();
+        // languageCode -> LocalizationAsset
+        private static readonly Dictionary<string, LocalizationAsset> _languageAssets = new Dictionary<string, LocalizationAsset>();
         private static string _currentLanguageCode = "en"; // default
         private static bool _initialized;
 
@@ -34,13 +35,14 @@ namespace FauxLightVolumes.Editor
             public string DisplayName; // e.g. "English", "日本語"
         }
 
-        private static readonly LanguageInfo[] _supportedLanguages = new[]
-        {
-            new LanguageInfo { Code = "en", DisplayName = "English" },
-            new LanguageInfo { Code = "ja", DisplayName = "日本語" }
-        };
+    // Dynamically populated from discovered .po files.
+    // DisplayName resolution order (first non-empty wins):
+    //  1. Localization string with key "LanguageDisplayName" inside that locale file.
+    //  2. CultureInfo(code).NativeName (if valid culture)
+    //  3. Upper-cased language code
+        private static readonly List<LanguageInfo> _supportedLanguages = new List<LanguageInfo>();
 
-        public static IEnumerable<LanguageInfo> SupportedLanguages => _supportedLanguages;
+        public static IEnumerable<LanguageInfo> SupportedLanguages => _supportedLanguages.OrderBy(l => l.Code);
 
         public static string CurrentLanguageCode => _currentLanguageCode;
 
@@ -63,36 +65,62 @@ namespace FauxLightVolumes.Editor
         private static void LoadAllLanguages()
         {
             _languageAssets.Clear();
+            _supportedLanguages.Clear();
             if (!Directory.Exists(PackageLocalizationFolder))
             {
+                Debug.LogWarning($"[FauxLightVolumes] Localization folder not found: {PackageLocalizationFolder}");
                 return; // No localization folder yet
             }
             var poFiles = Directory.GetFiles(PackageLocalizationFolder, "*.po", SearchOption.TopDirectoryOnly);
             foreach (var poFile in poFiles)
             {
-                try
+                var asset = AssetDatabase.LoadAssetAtPath<LocalizationAsset>(poFile);
+                if (asset == null)
                 {
-                    var asset = AssetDatabase.LoadAssetAtPath<LocalizationAsset>(poFile);
-                    if (asset == null)
-                    {
-                        // If for some reason importer not active yet, skip silently.
-                        continue;
-                    }
-                    // Prefer asset.localeIsoCode; fallback to file name sans extension.
-                    var codeProp = asset.localeIsoCode; // property from Unity API
-                    string code = string.IsNullOrEmpty(codeProp)
-                        ? Path.GetFileNameWithoutExtension(poFile).ToLowerInvariant()
-                        : codeProp.Trim().ToLowerInvariant();
-                    if (!_languageAssets.ContainsKey(code))
-                    {
-                        _languageAssets.Add(code, asset);
-                    }
+                    continue;
                 }
-                catch (Exception e)
+                string codeProp = asset.localeIsoCode;
+                string code = string.IsNullOrEmpty(codeProp)
+                    ? Path.GetFileNameWithoutExtension(poFile).ToLowerInvariant()
+                    : codeProp.Trim().ToLowerInvariant();
+                if (_languageAssets.ContainsKey(code))
                 {
-                    Debug.LogWarning($"[FauxLightVolumes][Localization] Failed to load localization asset {poFile}: {e.Message}");
+                    Debug.LogWarning($"[FauxLightVolumes] Duplicate localization asset found: {code}");
+                    continue;
+                }
+
+                _languageAssets.Add(code, asset);
+
+                // Resolve display name via localization key inside the asset.
+                string displayName = null;
+                var candidate = SafeGetLocalized(asset, LanguageDisplayNameKey);
+                if (!string.IsNullOrEmpty(candidate) && candidate != LanguageDisplayNameKey)
+                {
+                    displayName = candidate.Trim();
+                }
+
+                if (string.IsNullOrEmpty(displayName))
+                {
+                    displayName = SafeGetCultureNativeName(code) ?? code.ToUpperInvariant();
+                }
+
+                if (!_supportedLanguages.Any(l => l.Code == code))
+                {
+                    _supportedLanguages.Add(new LanguageInfo { Code = code, DisplayName = displayName });
                 }
             }
+        }
+
+        private static string SafeGetLocalized(LocalizationAsset asset, string key)
+        {
+            try { return asset.GetLocalizedString(key); }
+            catch { return null; }
+        }
+
+        private static string SafeGetCultureNativeName(string code)
+        {
+            try { return CultureInfo.GetCultureInfo(code).NativeName; }
+            catch { return null; }
         }
 
         private static void AutoDetectOrLoadPreviousLanguage()
@@ -152,8 +180,16 @@ namespace FauxLightVolumes.Editor
             {
                 return iso;
             }
-
-            return "en"; // final default
+            // If list contains English choose it; else first available; else default en
+            if (_supportedLanguages.Any(l => l.Code == "en"))
+            {
+                return "en";
+            }
+            if (_supportedLanguages.Count > 0)
+            {
+                return _supportedLanguages[0].Code;
+            }
+            return "en"; // no languages loaded yet
         }
 
         public static void SetLanguage(string code)
@@ -181,24 +217,19 @@ namespace FauxLightVolumes.Editor
             // Current language lookup
             if (_languageAssets.TryGetValue(_currentLanguageCode, out var asset))
             {
-                try
+                var localized = SafeGetLocalized(asset, key);
+                if (!string.IsNullOrEmpty(localized) && localized != key)
                 {
-                    var localized = asset.GetLocalizedString(key);
-                    // Unity's LocalizationAsset returns the key itself if not found; treat that as a miss
-                    if (!string.IsNullOrEmpty(localized) && localized != key)
-                        return localized;
+                    return localized;
                 }
-                catch (Exception) { /* ignore and try fallback */ }
             }
             // English fallback (only if not already English)
             if (_currentLanguageCode != "en" && _languageAssets.TryGetValue("en", out var enAsset))
             {
-                var enValue = enAsset.GetLocalizedString(key);
+                var enValue = SafeGetLocalized(enAsset, key);
                 if (!string.IsNullOrEmpty(enValue))
                 {
-                    {
-                        return enValue; // even if it's identical to key we just return it
-                    }
+                    return enValue;
                 }
             }
             return key; // final fallback: key itself

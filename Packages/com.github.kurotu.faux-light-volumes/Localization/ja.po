@@ -6,6 +6,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+msgid "LanguageDisplayName"
+msgstr "日本語"
+
 msgid "FauxLightVolume.BoundsSize"
 msgstr "境界サイズ"
 

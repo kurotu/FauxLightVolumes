@@ -6,6 +6,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "LanguageDisplayName"
+msgstr "English"
+
 msgid "FauxLightVolume.BoundsSize"
 msgstr "Bounds Size"
 
