@@ -6,7 +6,7 @@ using VRC.SDKBase;
 namespace FauxLightVolumes
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
-    public class FauxLightVolumeManager : UdonSharpBehaviour
+    public class FauxLightVolumeManager : FauxLightVolumeUdonSharpComponent
     {
 #if !COMPILER_UDONSHARP
         [LocalizedLabel]

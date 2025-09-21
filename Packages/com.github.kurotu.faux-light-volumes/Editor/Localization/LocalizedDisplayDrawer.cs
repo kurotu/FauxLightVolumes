@@ -31,11 +31,24 @@ namespace FauxLightVolumes.Editor
 
                 string localizedLabel = LocalizationManager.Get(baseKey);
                 string localizedTooltip = LocalizationManager.Get(tooltipKey);
-                if (localizedTooltip == tooltipKey)
+                bool labelMissing = string.IsNullOrEmpty(localizedLabel) || localizedLabel == baseKey;
+                bool tooltipMissing = string.IsNullOrEmpty(localizedTooltip) || localizedTooltip == tooltipKey;
+
+                if (labelMissing && tooltipMissing)
                 {
-                    localizedTooltip = label.tooltip;
+                    // Both missing: just use the original label GUIContent Unity gave us.
+                    guiContent = label;
                 }
-                guiContent = new GUIContent(localizedLabel, localizedTooltip);
+                else if (labelMissing)
+                {
+                    // Use original label text with (possibly localized) tooltip.
+                    guiContent = new GUIContent(label.text, tooltipMissing ? label.tooltip : localizedTooltip);
+                }
+                else
+                {
+                    // Have localized label; use localized tooltip if available else original.
+                    guiContent = new GUIContent(localizedLabel, tooltipMissing ? label.tooltip : localizedTooltip);
+                }
             }
 
             EditorGUI.PropertyField(position, property, guiContent, true);

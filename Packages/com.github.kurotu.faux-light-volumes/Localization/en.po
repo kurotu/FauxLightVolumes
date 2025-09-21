@@ -6,6 +6,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "FauxLightVolume.BoundsSize"
+msgstr "Bounds Size"
+
+msgid "FauxLightVolume.BoundsSize.tooltip"
+msgstr "Bounds size to which Faux Light Volumes are applied. Cannot be changed at runtime."
+
 msgid "FauxLightVolumeManager.UseOnPC"
 msgstr "Use on PC"
 

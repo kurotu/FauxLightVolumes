@@ -4,7 +4,8 @@
     "references": [
         "FauxLightVolumes",
         "FauxLightVolumes.UdonSharp",
-        "red.sim.LightVolumes"
+        "red.sim.LightVolumes",
+        "UdonSharp.Editor"
     ],
     "includePlatforms": [
         "Editor"

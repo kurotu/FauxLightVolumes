@@ -4,12 +4,13 @@ using UnityEngine;
 namespace FauxLightVolumes
 {
     [ExecuteAlways]
-    public class FauxLightVolume : MonoBehaviour
+    public class FauxLightVolume : FauxLightVolumeComponent
     {
         private static readonly Color GizmoColor = new Color(0.9f, 0.85f, 0.2f, 0.8f);
         private Projector LightVolumeProjector;
 
         [SerializeField]
+        [LocalizedLabel]
         private Vector3 BoundsSize = Vector3.one;
 
         /// <summary>

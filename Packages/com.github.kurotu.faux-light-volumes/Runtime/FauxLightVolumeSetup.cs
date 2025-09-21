@@ -4,7 +4,7 @@ using VRC.SDKBase;
 namespace FauxLightVolumes
 {
     [ExecuteAlways]
-    public class FauxLightVolumeSetup : MonoBehaviour
+    public class FauxLightVolumeSetup : FauxLightVolumeComponent
     {
 #if UNITY_EDITOR
         private void OnEnable()
