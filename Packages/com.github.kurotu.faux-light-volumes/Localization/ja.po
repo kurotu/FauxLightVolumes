@@ -45,6 +45,12 @@ msgstr "初期カーブモード"
 msgid "FauxLightVolumeManager.InitialCurveMode.tooltip"
 msgstr "開始時に適用されるカーブモード。"
 
+msgid "FauxLightVolumeManager.InitialOutputScale"
+msgstr "初期出力スケール"
+
+msgid "FauxLightVolumeManager.InitialOutputScale.tooltip"
+msgstr "開始時に適用されるFaux Light Volume全体の明るさ係数 (負値は1として扱われます)。"
+
 msgid "FauxLightVolumeManager.LightVolumes"
 msgstr "ライトボリューム一覧"
 

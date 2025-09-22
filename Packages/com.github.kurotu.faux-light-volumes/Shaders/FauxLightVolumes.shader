@@ -41,8 +41,10 @@ Shader "Hidden/Faux Light Volumes"
             // Tone curve globals (set via Shader.SetGlobalFloat / SetGlobalInt)
             //  _Udon_FauxLV_Gamma      : gamma exponent (>0). If <=0, defaults to 1.0
             //  _Udon_FauxLV_CurveMode  : 0=S-curve (original), 1=standard gamma, 2=inverse gamma
+            //  _Udon_FauxLV_OutputScale: scales final light volume contribution (>0). If <0 treated as 1.
             float _Udon_FauxLV_Gamma;    // replacement for legacy _Udon_LVGamma (renamed to avoid collisions)
             int   _Udon_FauxLV_CurveMode; // see modes above
+            float _Udon_FauxLV_OutputScale; // global scale factor
 
             struct appdata
             {
@@ -118,7 +120,13 @@ Shader "Hidden/Faux Light Volumes"
                 // Note: Simply doing lvColor*S yields luminance I·S(I) (scaling), not replacement by S(I)
                 float invI = (I > 1e-4) ? rcp(I) : 0.0;                 // inverse of I (rcp); return 0 for tiny I to avoid divergence
                 float3 H = (I > 1e-4) ? saturate(lvColor * invI) : float3(1,1,1); // hue vector; fallback to white when I is tiny
-                float3 col = saturate(H * S);                           // replace luminance with S(I) and clamp to [0,1]
+                float3 col = H * S;                            // replace luminance with S(I)
+
+                // OUTPUT SCALING — allow effective upper bound to vary; if negative, fallback to 1 (neutral scaling)
+                float scale = (_Udon_FauxLV_OutputScale < 0.0) ? 1.0 : _Udon_FauxLV_OutputScale;
+                col *= scale;
+
+                // Do not saturate so HDR paths can exceed 1. LDR will clamp later via framebuffer.
                 return float4(col, 1);
             }
             ENDCG

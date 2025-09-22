@@ -45,6 +45,12 @@ msgstr "Initial Curve Mode"
 msgid "FauxLightVolumeManager.InitialCurveMode.tooltip"
 msgstr "Curve mode applied at start."
 
+msgid "FauxLightVolumeManager.InitialOutputScale"
+msgstr "Initial Output Scale"
+
+msgid "FauxLightVolumeManager.InitialOutputScale.tooltip"
+msgstr "Global multiplier for Faux Light Volume brightness applied at start (negative values fall back to 1)."
+
 msgid "FauxLightVolumeManager.LightVolumes"
 msgstr "Light Volumes"
 

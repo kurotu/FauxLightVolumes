@@ -1,4 +1,3 @@
-
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
@@ -33,6 +32,11 @@ namespace FauxLightVolumes
 #endif
         public FauxLightVolumeCurveMode InitialCurveMode = FauxLightVolumeCurveMode.SCurve;
 
+#if !COMPILER_UDONSHARP
+        [LocalizedLabel]
+#endif
+        public float InitialOutputScale = 1.0f;
+
         [SerializeField]
 #if !COMPILER_UDONSHARP
         [LocalizedLabel]
@@ -41,8 +45,10 @@ namespace FauxLightVolumes
 
         private float _gamma;
         private FauxLightVolumeCurveMode _curveMode;
+        private float _outputScale;
         private int _cachedGammaPropertyID = -1;
         private int _cachedCurveModePropertyID = -1;
+        private int _cachedOutputScalePropertyID = -1;
 
         public float Gamma
         {
@@ -73,6 +79,21 @@ namespace FauxLightVolumes
             }
         }
 
+        public float OutputScale
+        {
+            get => _outputScale;
+            set
+            {
+                _outputScale = value;
+                if (_cachedOutputScalePropertyID == -1)
+                {
+                    _cachedOutputScalePropertyID = VRCShader.PropertyToID("_Udon_FauxLV_OutputScale");
+                }
+                // Negative values are treated as 1 in shader; no need to clamp here unless you want to avoid confusion.
+                VRCShader.SetGlobalFloat(_cachedOutputScalePropertyID, _outputScale);
+            }
+        }
+
         public bool IsAvailableOnCurrentPlatform
         {
             get
@@ -91,6 +112,7 @@ namespace FauxLightVolumes
         {
             Gamma = InitialGamma;
             CurveMode = InitialCurveMode;
+            OutputScale = InitialOutputScale;
             if (IsAvailableOnCurrentPlatform)
             {
                 SetAllLightVolumesActive(true);
