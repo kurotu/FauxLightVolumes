@@ -24,6 +24,7 @@ namespace FauxLightVolumes
 
 #if !COMPILER_UDONSHARP
         [LocalizedLabel]
+        [Range(0.1f, 1.0f)]
 #endif
         public float InitialGamma = 0.6f;
 
@@ -34,6 +35,7 @@ namespace FauxLightVolumes
 
 #if !COMPILER_UDONSHARP
         [LocalizedLabel]
+        [Range(0.0f, 5.0f)]
 #endif
         public float InitialOutputScale = 1.0f;
 
