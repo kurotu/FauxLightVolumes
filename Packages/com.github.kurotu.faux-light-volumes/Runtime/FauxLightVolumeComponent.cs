@@ -7,6 +7,7 @@ namespace FauxLightVolumes
     /// This class is just a marker for the editor to identify faux light volume components.
     /// </summary>
     [Icon("Packages/com.github.kurotu.faux-light-volumes/Resources/FauxLightVolumesIcon.png")]
+    [HelpURL("https://github.com/kurotu/FauxLightVolumes")]
     public abstract class FauxLightVolumeComponent : MonoBehaviour
     {
     }
