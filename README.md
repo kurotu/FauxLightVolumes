@@ -44,7 +44,7 @@ Adding this package to your world enables [VRC Light Volumes](https://github.com
 
 ## License / ライセンス
 
-TBD
+The MIT License.
 
 ### LightVolumes.cginc
 
