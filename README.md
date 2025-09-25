@@ -6,6 +6,8 @@ Adding this package to your world enables [VRC Light Volumes](https://github.com
 
 ワールドに導入することで、Mobile(Quest, Android, iOS)版VRChatでアバターに[VRC Light Volumes](https://github.com/REDSIM/VRCLightVolumes)のような陰影効果を付与します。
 
+![Faux Light Volumes Preview](./Images/Preview.png)
+
 ## Requirements / 必要環境
 
 - Unity 2022.3.22f1
