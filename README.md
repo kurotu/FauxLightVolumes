@@ -61,4 +61,4 @@ This repository bundles and redistributes the `LightVolumes.cginc` file from VRC
 ## Donation / 支援
 
 - [GitHub Sponsors](https://github.com/sponsors/kurotu)
-- [Booth](#)
+- [Booth](https://kurotu.booth.pm/items/7466343)
