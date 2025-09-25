@@ -8,6 +8,11 @@ Adding this package to your world enables [VRC Light Volumes](https://github.com
 
 ![Faux Light Volumes Preview](./Images~/Preview.png)
 
+## Demo World / デモワールド
+[Classroom - Faux Light Volumes Demo](https://vrchat.com/home/launch?worldId=wrld_4a69f5bb-35a5-4ea7-965c-8e53bf670548)
+
+Join with mobile clients (Quest, Android, iOS).
+
 ## Requirements / 必要環境
 
 - Unity 2022.3.22f1
