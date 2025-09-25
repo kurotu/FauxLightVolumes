@@ -53,6 +53,15 @@ jobs:
           echo "unityPackage=${{ vars.PACKAGE_NAME }}-${{ steps.version.outputs.value }}.unitypackage" >> $GITHUB_ENV
           echo "version=${{ steps.version.outputs.value }}" >> $GITHUB_ENV
 
+      # Embed the readme and license file into the Package
+      - name: Embed License
+        run: cp LICENSE "${{ env.packagePath }}/"
+
+      - name: Embed README and Images
+        run: |
+          cp README.md "${{ env.packagePath }}/"
+          cp -r Images~ "${{ env.packagePath }}/Images~"
+
       # Zip the Package for release
       - name: Create Package Zip
         working-directory: "${{ env.packagePath }}"
