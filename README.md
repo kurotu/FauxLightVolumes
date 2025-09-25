@@ -35,12 +35,18 @@ Adding this package to your world enables [VRC Light Volumes](https://github.com
 3. Confirm it works in an **Android** or **iOS** build (on PC, the regular VRC Light Volumes runs).
 4. Configure settings using the components on the `Faux Light Volume Manager` GameObject.
 
+> [!WARNING]
+> It is recommended that worlds support **both of Android and iOS**. Otherwise, material errors will occur on avatars in iOS.
+
 ###
 
 1. シーンにVRC Light Volumesを設定します。
 2. ヒエラルキーで右クリックしてメニューから`Faux Light Volume`を選択します。
 3. **Androidビルド**または**iOSビルド**で動作を確認します。(PCでは通常のVRCLVが動作します)
 4. `Faux Light Volume Manager`オブジェクト内のコンポーネントで設定を変更できます。
+
+> [!WARNING]
+> ワールドは**AndroidとiOSの両方**をサポートすることを推奨します。そうでない場合、iOSではアバターにマテリアルエラーが発生します。
 
 ## License / ライセンス
 
