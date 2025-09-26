@@ -2,11 +2,14 @@
     "name": "com.github.kurotu.faux-light-volumes",
     "displayName": "Faux Light Volumes",
     "version": "0.0.0",
-    "description": "Faux light volumes for VRChat mobile",
+    "description": "Realistic shading system for mobile",
     "unity": "2022.3",
     "author": {
         "name": "kurotu"
     },
+    "documentationUrl": "https://github.com/kurotu/FauxLightVolumes",
+    "license": "MIT",
+    "licensesUrl": "https://github.com/kurotu/FauxLightVolumes/blob/main/LICENSE",
     "vpmDependencies": {
         "com.vrchat.worlds": "^3.8.2",
         "red.sim.lightvolumes": "^2.0.0"
