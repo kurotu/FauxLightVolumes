@@ -1,7 +1,7 @@
 {
     "name": "com.github.kurotu.faux-light-volumes",
     "displayName": "Faux Light Volumes",
-    "version": "0.0.0",
+    "version": "1.0.0",
     "description": "Realistic shading system for mobile",
     "unity": "2022.3",
     "author": {
