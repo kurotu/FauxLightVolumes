@@ -25,14 +25,14 @@ Mobileクライアント(Quest, Android, iOS)を使用してください。
 
 1. Add the [VRC Light Volumes](https://github.com/REDSIM/VRCLightVolumes?tab=readme-ov-file#Installation-through-VRChat-Creator-Companion) repository to VCC.
 2. Click the link below to add this repository to VCC:
-    https://kurotu.github.io/vpm-repos/vpm.html
+    - https://kurotu.github.io/vpm-repos/vpm.html
 3. Add `Faux Light Volumes` to your world project in VCC.
 
 ###
 
 1. [VRC Light Volumes](https://github.com/REDSIM/VRCLightVolumes?tab=readme-ov-file#Installation-through-VRChat-Creator-Companion)のリポジトリをVCCに追加します。
 2. 下のリンクをクリックしてVCCにリポジトリを追加します。
-    https://kurotu.github.io/vpm-repos/vpm.html
+    - https://kurotu.github.io/vpm-repos/vpm.html
 3. VCCで`Faux Light Volumes`をワールド用プロジェクトに追加します。
 
 ## Usage / 使い方
