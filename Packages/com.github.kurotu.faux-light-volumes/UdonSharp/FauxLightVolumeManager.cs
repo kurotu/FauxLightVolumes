@@ -24,14 +24,14 @@ namespace FauxLightVolumes
 
 #if !COMPILER_UDONSHARP
         [LocalizedLabel]
-        [Range(0.1f, 1.0f)]
 #endif
-        public float InitialGamma = 0.6f;
+        public FauxLightVolumeCurveMode InitialCurveMode = FauxLightVolumeCurveMode.SCurve;
 
 #if !COMPILER_UDONSHARP
         [LocalizedLabel]
+        [Range(0.1f, 1.0f)]
 #endif
-        public FauxLightVolumeCurveMode InitialCurveMode = FauxLightVolumeCurveMode.SCurve;
+        public float InitialGamma = 0.6f;
 
 #if !COMPILER_UDONSHARP
         [LocalizedLabel]
