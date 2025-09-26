@@ -13,6 +13,8 @@ Adding this package to your world enables [VRC Light Volumes](https://github.com
 
 Join with mobile clients (Quest, Android, iOS).
 
+Mobileクライアント(Quest, Android, iOS)を使用してください。
+
 ## Requirements / 必要環境
 
 - Unity 2022.3.22f1
@@ -41,7 +43,7 @@ Join with mobile clients (Quest, Android, iOS).
 4. Configure settings using the components on the `Faux Light Volume Manager` GameObject.
 
 > [!WARNING]
-> It is recommended that worlds support **both of Android and iOS**. Otherwise, material errors will occur on avatars in iOS.
+> It is **strongly recommended** that worlds support **both of Android and iOS**. Otherwise, material errors will occur on avatars in iOS.
 
 ###
 
@@ -51,7 +53,7 @@ Join with mobile clients (Quest, Android, iOS).
 4. `Faux Light Volume Manager`オブジェクト内のコンポーネントで設定を変更できます。
 
 > [!WARNING]
-> ワールドは**AndroidとiOSの両方**をサポートすることを推奨します。そうでない場合、iOSではアバターにマテリアルエラーが発生します。
+> ワールドは**AndroidとiOSの両方**をサポートすることを**強く推奨**します。そうでない場合、iOSではアバターにマテリアルエラーが発生します。
 
 ## License / ライセンス
 
