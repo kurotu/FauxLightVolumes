@@ -1,6 +1,8 @@
 using UdonSharp;
 using UnityEngine;
+using VRC.SDK3.Rendering;
 using VRC.SDKBase;
+using VRC.Udon.Common.Interfaces;
 
 namespace FauxLightVolumes
 {
@@ -45,12 +47,16 @@ namespace FauxLightVolumes
 #endif
         private FauxLightVolumeInstance[] LightVolumes;
 
+        [SerializeField]
+        private CustomRenderTexture ErrorDetectorTexture;
+
         private float _gamma;
         private FauxLightVolumeCurveMode _curveMode;
         private float _outputScale;
         private int _cachedGammaPropertyID = -1;
         private int _cachedCurveModePropertyID = -1;
         private int _cachedOutputScalePropertyID = -1;
+        private bool _hasShaderError = false;
 
         public float Gamma
         {
@@ -101,11 +107,11 @@ namespace FauxLightVolumes
             get
             {
 #if UNITY_ANDROID
-                return UseOnAndroid;
+                return UseOnAndroid && !(_hasShaderError);
 #elif UNITY_IOS
-                return UseOnIOS;
+                return UseOnIOS && !(_hasShaderError);
 #else
-                return UseOnPC;
+                return UseOnPC && !(_hasShaderError);
 #endif
             }
         }
@@ -122,6 +128,16 @@ namespace FauxLightVolumes
             else
             {
                 SetAllLightVolumesActive(false);
+            }
+
+            if (ErrorDetectorTexture != null)
+            {
+                ErrorDetectorTexture.Update();
+                SendCustomEventDelayedFrames(nameof(ReadbackErrorDetectorTexture), 1);
+            }
+            else
+            {
+                Debug.LogError("ErrorDetectorTexture is not assigned. FauxLightVolumeManager cannot detect shader compilation errors.");
             }
         }
 
@@ -148,6 +164,39 @@ namespace FauxLightVolumes
                 if (lightVolume.gameObject != null)
                 {
                     lightVolume.gameObject.SetActive(value);
+                }
+            }
+        }
+
+        public void ReadbackErrorDetectorTexture()
+        {
+            Debug.Log("FauxLightVolumeManager: ReadbackErrorDetectorTexture");
+            if (ErrorDetectorTexture != null)
+            {
+                VRCAsyncGPUReadback.Request(ErrorDetectorTexture, 0, (IUdonEventReceiver)this);
+            }
+        }
+
+        public override void OnAsyncGpuReadbackComplete(VRCAsyncGPUReadbackRequest request)
+        {
+            Debug.Log("FauxLightVolumeManager: OnAsyncGpuReadbackComplete");
+            if (request.hasError)
+            {
+                Debug.LogError("GPU readback error!");
+                return;
+            }
+            else
+            {
+                var px = new Color32[ErrorDetectorTexture.width * ErrorDetectorTexture.height];
+                Debug.Log($"FauxLightVolumeManager: Readback: {request.TryGetData(px)}");
+                var pix = px[0];
+                Debug.Log($"FauxLightVolumeManager: Readback pixel RGBA = {pix.r}, {pix.g}, {pix.b}, {pix.a}");
+                var shaderIsWorking = px[0].g == 255 && px[0].r == 0 && px[0].b == 0;
+                _hasShaderError = !shaderIsWorking;
+                if (_hasShaderError)
+                {
+                    Debug.Log($"FauxLightVolumeManager: Shader compilation error detected: {_hasShaderError}");
+                    SetAllLightVolumesActive(false);
                 }
             }
         }

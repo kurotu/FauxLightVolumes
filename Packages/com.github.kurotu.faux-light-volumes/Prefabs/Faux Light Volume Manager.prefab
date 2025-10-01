@@ -71,9 +71,12 @@ MonoBehaviour:
   UseOnPC: 0
   UseOnAndroid: 1
   UseOnIOS: 1
-  EnforceMinBrightness: 0
-  MinBrightness: 0
+  InitialCurveMode: 0
+  InitialGamma: 0.6
+  InitialOutputScale: 1
   LightVolumes: []
+  ErrorDetectorTexture: {fileID: 8600000, guid: 0af0cf7cb28bb1647b76bb79ea7859d5,
+    type: 2}
 --- !u!114 &3709667885718526037
 MonoBehaviour:
   m_ObjectHideFlags: 0

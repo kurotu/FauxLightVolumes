@@ -4,6 +4,7 @@
     "references": [
         "UdonSharp.Runtime",
         "VRC.Udon",
+        "VRC.Udon.Serialization.OdinSerializer",
         "FauxLightVolumes"
     ],
     "includePlatforms": [],
