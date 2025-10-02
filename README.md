@@ -43,7 +43,7 @@ Mobileクライアント(Quest, Android, iOS)を使用してください。
 4. Configure settings using the components on the `Faux Light Volume Manager` GameObject.
 
 > [!WARNING]
-> It is **strongly recommended** that worlds support **both of Android and iOS**. Otherwise, material errors will occur on avatars in iOS.
+> It is **strongly recommended** that worlds support **both of Android and iOS**. Otherwise, Faux Light Volumes will be disabled in iOS.
 
 ###
 
@@ -53,7 +53,7 @@ Mobileクライアント(Quest, Android, iOS)を使用してください。
 4. `Faux Light Volume Manager`オブジェクト内のコンポーネントで設定を変更できます。
 
 > [!WARNING]
-> ワールドは**AndroidとiOSの両方**をサポートすることを**強く推奨**します。そうでない場合、iOSではアバターにマテリアルエラーが発生します。
+> ワールドは**AndroidとiOSの両方**をサポートすることを**強く推奨**します。そうでない場合、iOSではFaux Light Volumesは無効になります。
 
 ## License / ライセンス
 
